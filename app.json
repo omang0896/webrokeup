@@ -1,0 +1,40 @@
+{
+  "expo": {
+    "name": "sparta-myhoneytip-ahn",
+    "slug": "sparta-myhoneytip-ahn",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+
+
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "buildNumber": "1.0.0",
+      "bundleIdentifier": "com.myhoneytip.ahn",
+      "config": {
+        "googleMobileAdsAppId": "ca-app-pub-1590390650623909~1144738049"
+      }
+    },
+    "android": {
+          "package": "com.myhoneytip.ahn",
+          "versionCode": 1,
+          "config": {
+            "googleMobileAdsAppId": "ca-app-pub-1590390650623909~9789514821"
+          }
+  }
+  }
+}
