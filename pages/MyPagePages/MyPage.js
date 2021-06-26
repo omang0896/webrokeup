@@ -1,12 +1,9 @@
 
-import React, {useEffect, useState} from 'react';
+import React, {Children, useEffect, useState} from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, TouchableHighlight, Platform} from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { firebase_db } from '../../firebaseConfig';
-import { render } from 'react-dom';
-import { NewPage} from './NewPage'
-
-const aboutBookImage = "http://ojsfile.ohmynews.com/STD_IMG_FILE/2018/0309/IE002297749_STD.jpg"
+import Constants from 'expo-constants';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -26,8 +23,7 @@ const MyBookItem = ({navigation, myitem}) => {
 
 const MyPage = ({navigation, route}) => {
     const [myBook, setMyBook] = useState([]);
-
-
+    
     useEffect(() => {
         let temp = [];
         let data = firebase_db.ref('book/')
@@ -44,59 +40,49 @@ const MyPage = ({navigation, route}) => {
 
     function renderMyBook() {
         //console.log(books);
-        const list = myBook.map(myitem => (
-            <MyBookItem 
-                navigation={navigation}
-                myitem={myitem}
-            />
-        ))
-        return list
-    }
+        const user_id = Constants.installationId;
+        const filteredList = myBook.filter(filteredMyBook => filteredMyBook.user_id == user_id);
+        const list = filteredList.map(myitem =>
+            <MyBookItem
+                navigation = {navigation}
+                myitem = {myitem}/>)
+           
+        return list;
+        }
+    
 
 
 
 return (
-  <View style={styles.container}>
+    <View style={styles.container}>
 
-<View style={styles.profileContainer}>
+        <View style={styles.profileContainer}>
+            <View style={styles.settingPlusUserNameContainer}>
+                <Text style={styles.profileUserName}>작가이름</Text>
+                <TouchableOpacity onPress={()=>{navigation.navigate('setting')}}>
+                    <Icon name="settings-outline" size={25} color="black" style={styles.settingIcon}/>
+                </TouchableOpacity>
+            </View>
+            <Text style={styles.profileUserDesc}> 상태 메세지 2줄까지 가능</Text>
+        </View>
 
-<View style={styles.settingPlusUserNameContainer}>
+        <ScrollView style={styles.container}>
+            <StatusBar style="white" />
+            <View  style={styles.subContainer}>
+                <TouchableOpacity style={StyleSheet.tag} onPress={()=>{navigation.navigate('PopularBook')}}>
+                    <Text style={styles.tagText}>나의 이별북</Text>
+                </TouchableOpacity>
 
-<Text style={styles.profileUserName}>작가이름</Text>
-
-<TouchableOpacity onPress={()=>{navigation.navigate('setting')}}>
-
-<Icon name="settings-outline" size={25} color="black" style={styles.settingIcon}/>
-
-</TouchableOpacity>
-
-</View>
-
-<Text style={styles.profileUserDesc}> 상태 메세지 2줄까지 가능</Text>
-
-</View>
-<ScrollView style={styles.container}>
-    <StatusBar style="white" />
-
-    <View  style={styles.subContainer}>
-
-        <TouchableOpacity style={StyleSheet.tag} onPress={()=>{navigation.navigate('PopularBook')}}>
-             <Text style={styles.tagText}>나의 이별북</Text>
-        </TouchableOpacity>
-        
-        <ScrollView style={styles.cardContainer} horizontal = {true}>
-
-
-        { renderMyBook() }
-        
-
-        </ScrollView> 
-    <TouchableOpacity style= {{padding: 15, color: "yellow"}}onPress={()=>{navigation.navigate("MakeNewBook")}}>
-        <Text>새로운 책 만들기</Text>
-    </TouchableOpacity>
+                <ScrollView style={styles.cardContainer} horizontal = {true}>
+                    { renderMyBook() }
+                </ScrollView> 
+                    
+                <TouchableOpacity style= {{alignSelf: "center", padding: 20, paddingHorizontal: 150,backgroundColor: "#fe8d6f"}}onPress={()=>{navigation.navigate("MakeNewBook")}}>
+                    <Text style ={{fontWeight:"600", fontSize: 15}}>새로운 책 만들기</Text>
+                </TouchableOpacity>
+            </View>
+        </ScrollView>
     </View>
-</ScrollView>
-</View>
 )}
 
 const styles = StyleSheet.create({
