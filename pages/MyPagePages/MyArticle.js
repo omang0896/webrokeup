@@ -1,11 +1,47 @@
-import React from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, Touchable} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
+import {firebase_db} from '../../firebaseConfig';
 import { StatusBar } from 'expo-status-bar';
 
 
-export default function MyArticle({navigation, route}) {
-    const {myitem, chapters} = route.params;
+const MyArticle = ({navigation, route}) => {
+    const {myitem, chapters, chapterTitle} = route.params;
+    const {bookKey, chapterKey} = route.params;
+    const [data, setData] = useState([])
+    console.log(chapters)
+
+
+    // useEffect(()=>{
+    //     console.log("실행된당")
+    
+    //     var key = Object.key
+    //     var changeDataRef = firebase_db.ref(`book/${key}/chapters`);
+
+    //     changeDataRef.on("value",(snapshot) =>{
+    //       console.log(snapshot)
+     
+    //       const tmp = [];
+    //       snapshot.forEach((child)=>
+    //         tmp.unshift({
+    //           key:child.key,
+    //           chapterTitle:child.val().chapterTitle,
+    //           mainText:child.val().mainText,
+    //           regdate:child.val().regdate
+    //         })
+    //     )
+    //     })
+    
+    //       console.log(tmp);
+    //       setData(tmp);
+    //   },[])
+
+      
+    function delArticle(){
+        firebase_db.ref()
+    }
+    
+    
+
     return (
 
         <View style={styles.container}>
@@ -16,32 +52,19 @@ export default function MyArticle({navigation, route}) {
                     <Text style={styles.editButtonText}>편집</Text>
                 </TouchableOpacity>  
 
-                <TouchableOpacity style={styles.deleteButton}>
-                    <Text style={styles.deleteButtonText}>삭제</Text>
+                <TouchableOpacity style={styles.deleteButton} >
+                    <Text style={styles.deleteButtonText} onPress={delArticle()}>삭제</Text>
                 </TouchableOpacity>  
             </View>
 
             <View>
-                <Text style={styles.bookTitle}>{chapters.chapterTitle}</Text>  
+                <Text style={styles.bookTitle}>{chapterTitle}</Text>  
 
             </View>
             <ScrollView style={styles.textContainer}>
                 
-                    <Text style={styles.bookText}>   
-                        {chapters.chapterTitle}
-                        {/*너무 쉽게 들춰보아 너덜해진 편지지가 
-                        있고 너무 세게 열어두어 닫힌 줄 모르는 
-                        마음과 너무 깊이 맛보아서 비릿해진 
-                        그림움이 있어. 
-
-                        너무 오래 쓰다듬어 
-                        매끈해진 로라반정이 있고 너무 높이 
-                        자라나서 비대해진 생각들이 있고
-                        너무 자주 발음해서 입술에 물든 
-                        네 이름이 있어. */}
-                        </Text>  
-            
-            
+                    <Text style={styles.bookText}>{chapters.mainText}</Text>  
+                    <Text style={styles.regdate}>{chapters.regdate}</Text>
         </ScrollView>
         <View style={styles.bottomButtonContainer}>
 
@@ -96,6 +119,10 @@ const styles = StyleSheet.create({
           marginRight:"10%",
 
       },
+      
+      regdate: {
+          marginLeft : "10%"
+      },
 
       bottomButtonContainer: {
         flex:1,
@@ -114,12 +141,6 @@ const styles = StyleSheet.create({
 
     }
 
-
-
-
-
-
-
-
-
 })
+
+export default MyArticle;
