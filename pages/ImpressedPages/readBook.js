@@ -2,16 +2,16 @@ import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView} from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
-const ChapterItem = ({navigation, item, bookName}) => {
+const ChapterItem = ({navigation, item, chapters, bookName}) => {
     console.log(item);
     console.log("~~~~~~~~~~~~~~~~~~~~~~")
     //console.log("hellooo")
     return (
         <View>
-            <TouchableOpacity style={styles.bookIndexOne} onPress={()=>{navigation.navigate('readArticle', {chapter: item, bookName: bookName})}}>
-                  <Text style={styles.bookIndexOneTitle}>{item.title}</Text>  
-                <Text style={styles.bookIndexOnePunchLine}>"먼 훗날 나를 읽게 된다면 너는 잠시 울어줄까"</Text>  
-                <Text style={styles.bookIndexText}>{item.content}</Text>
+            <TouchableOpacity style={styles.bookIndexOne} onPress={()=>{navigation.navigate('readArticle', {chapters: item, bookName: bookName})}}>
+                  <Text style={styles.bookIndexOneTitle}>{chapters.chapterTitle}</Text>  
+                <Text style={styles.bookIndexOnePunchLine}>"하이라이트 문장 들어가야 됨"</Text>  
+                <Text style={styles.bookIndexText}>{chapters.mainText}</Text>
             </TouchableOpacity>
             <View style={{borderBottomColor: "gray" ,borderBottomWidth: 1,}}/>
         </View>
@@ -20,23 +20,27 @@ const ChapterItem = ({navigation, item, bookName}) => {
 
 const readBook = ({navigation, route}) => {
     const { item } = route.params;
+    const intro = Object.values(item.intro);
+    const chapters = Object.values(item.chapters);
+    const subChapters = Object.values(chapters)
+
     
     const aboutImage = "http://ojsfile.ohmynews.com/STD_IMG_FILE/2018/0309/IE002297749_STD.jpg"
 
     function renderChapterList() {
         //console.log(item.chapter)
-        if(item.chapter == undefined) {
+        if(subChapters == undefined) {
             return null
         }
         else {
-            const list = item.chapter.map(chapter => (
+            const list = subChapters.map(chapters => (
                 <ChapterItem 
                     navigation={navigation}
-                    chapter={chapter}
-                    bookName={item.title}
+                    chapters={chapters}
+                    bookName={item.bookTitle}
                 />
             ))
-            return list
+            return list;
         }
     }
 
@@ -44,11 +48,11 @@ const readBook = ({navigation, route}) => {
     <ScrollView style={styles.container}>
         <View  style={styles.bookCoverContainer}>
             <StatusBar style="white" />
-            <Image style={styles.bookCoverImage} source={{uri:aboutImage}}></Image>
+            <Image style={styles.bookCoverImage} source={{uri:item.image}}></Image>
         </View>
         <View  style={styles.bookInfoContainer}>
-            <Text style={styles.bookTitle}>{item.title}</Text>  
-            <Text style={styles.bookDesc}>{item.description}</Text>  
+            <Text style={styles.bookTitle}>{item.bookTitle}</Text>  
+            <Text style={styles.bookDesc}>{intro}</Text>  
             <TouchableOpacity style={styles.subButton}>        
                 <Text style={styles.subButtonText}>구독하기</Text>
             </TouchableOpacity>   
