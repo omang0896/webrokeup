@@ -11,38 +11,49 @@ const BookItem = ({navigation, item}) => {
     return (
         <TouchableHighlight onPress={()=>{navigation.navigate('readBook', {item: item})}}>
             <View>
-                <Image style={styles.bookButtonImage} source={{uri:aboutBookImage}} />
+                <Image style={styles.bookButtonImage} source={{uri:item.image}} />
             </View>
         </TouchableHighlight>
     )
 }
 
+// const ChaptersItem = ({navigation, item}) => {
+//     <TouchableOpacity style={styles.chOne} onPress={()=>{navigation.navigate('readArticle')}}>
+//             <Text style={styles.chTitle}>{item.bookTitle}</Text>  
+//             <Text style={styles.chOnePunchLine}>{item.mainText}</Text>  
+//             <Text style={styles.chWriter}> {item.user_id} </Text>  
+//     </TouchableOpacity>
+// }
+
 const Main = ({navigation, route}) => {
-    const [books, setBooks] = useState([]);
+    const [book, setBook] = useState([]);
 
     useEffect(() => {
         let temp = [];
-        let data = firebase_db.ref('books/')
+        let data = firebase_db.ref('book/')
             .on('value', (snapshot) => {
                 console.log(snapshot);
                 snapshot.forEach((child) => {
                     temp.push(child.val());
                 })
-                setBooks(temp);
+                setBook(temp);
                 //console.log(temp);
             })
     }, [])
 
     function renderBooks() {
         //console.log(books);
-        const list = books.map(item => (
+        const list = book.map(item => (
             <BookItem 
                 navigation={navigation}
                 item={item}
             />
         ))
         return list
+
     }
+    
+
 
 return (
 <ScrollView style={styles.container}>
